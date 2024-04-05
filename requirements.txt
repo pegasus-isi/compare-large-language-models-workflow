@@ -1,0 +1,6 @@
+evaluate==0.4.1
+matplotlib
+pegasus-wms
+scikit-learn
+torch
+transformers[torch]==4.39.3
