@@ -19,6 +19,7 @@ def main(top_dir: Path):
     parser.add_argument('--metrics', nargs='+', default=['accuracy'])
     parser.add_argument('--batch-size', type=int, default=64)
     parser.add_argument('--n-labels', default=5)
+    parser.add_argument('--image')
 
     args = parser.parse_args()
 
@@ -29,8 +30,8 @@ def main(top_dir: Path):
     tc = TransformationCatalog()
     base_container = Container('base',
                                Container.SINGULARITY,
-                               image=str((top_dir / 'base.sif').resolve()),
-                               image_site='local')
+                               image=args.image if args.image else 'docker://pzuk/compare-llms',
+                               image_site='local' if args.image else 'docker_hub')
     tc.add_containers(base_container)
 
     prepare = Transformation('prepare', site='local', pfn=top_dir / 'prepare.py',
