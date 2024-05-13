@@ -36,7 +36,8 @@ def main(top_dir: Path):
 
     prepare = Transformation('prepare', site='local', pfn=top_dir / 'prepare.py',
                              is_stageable=True,
-                             container=base_container)
+                             container=base_container)\
+                .add_pegasus_profile(memory=2048)
 
     evaluate = Transformation('evaluate', site='local', pfn=top_dir / 'evaluate.py',
                              is_stageable=True,
@@ -84,6 +85,7 @@ def main(top_dir: Path):
         sft_out_name = File(f'{m}-sft.json')
         eval_sft = Job(evaluate)\
             .add_args(*common_args,
+                      '--fine-tune',
                       '--output', sft_out_name,
             ).add_inputs(TRAIN_DATA, TEST_DATA, VALIDATION_DATA)\
             .add_outputs(sft_out_name)

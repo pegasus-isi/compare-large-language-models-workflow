@@ -19,7 +19,7 @@ def compute_metrics(logits, labels , metrics):
     preditctions = torch.argmax(logits, dim=-1)
     return metrics.co
 
-def fine_tune(model, train_data, test_data, batch_size):
+def fine_tune(model, train_data, test_data, batch_size, device):
     train_dataloader = DataLoader(train_data, shuffle=True, batch_size=batch_size)
     test_dataloader = DataLoader(test_data, batch_size=batch_size)
     optimizer = AdamW(model.parameters(), lr=5e-5)
@@ -76,7 +76,7 @@ def main():
 
     model = AutoModelForSequenceClassification.from_pretrained(args.model, num_labels=n_labels).to(device)
     if args.fine_tune:
-        fine_tune(model, tokenized_data['train'], tokenized_data['test'], args.batch_size)
+        fine_tune(model, tokenized_data['train'], tokenized_data['test'], args.batch_size, device)
 
     model.eval()
     metrics = evaluate.combine(args.metrics)
