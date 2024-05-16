@@ -37,5 +37,18 @@ pip install -r requirements.txt
 ./workflow.py --models bert-base-cased albert-base-v2 --batch-size 8
 ```
 
+## Container
+The workflow uses Singularity containers to execute each step. In the default setup, a container is created using the prebuilt Docker image from DockerHub.
+
+To build the Singularity image locally, execute the following commands:
+```bash
+docker build -t compare-llms-workflow .
+singularity build base.sif docker-daemon://compare-llms-workflow:latest
+```
+Next, specify the path to the built image using the `--image` option.
+```bash
+./workflow.py --image $PWD/base.sif ...
+```
+
 ## Results
 Once the computations are finished, the results will be aggregated into agg.csv and rendered as plots for easy interpretation (`agg.pdf`)
